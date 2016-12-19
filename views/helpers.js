@@ -1,11 +1,11 @@
 var moment = require("moment");
 var hbs = require('hbs');
 
-var helpers = new function () {
+let helpers = function () {
 
-	hbs.registerHelper('timestamp', function(text, options) {
+	hbs.registerHelper('timestamp', (text, options) => {
 		return moment(text).format("DD/MM/YYYY");
 	});
 }
 
-module.exports = helpers;
+module.exports = new helpers();  

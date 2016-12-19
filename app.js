@@ -5,15 +5,17 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var hbs = require('hbs');
+var hbsutils = require('hbs-utils')(hbs);
 var helpers = require("./views/helpers");
 var session = require('express-session');
+
 
 //routes
 var routes = require('./routes/index');
 
 var app = express();
 hbs.registerPartials(__dirname + '/views/partials');
-
+hbsutils.registerWatchedPartials(__dirname + '/views/partials');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

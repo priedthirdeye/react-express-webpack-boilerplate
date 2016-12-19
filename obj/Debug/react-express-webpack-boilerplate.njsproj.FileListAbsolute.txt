@@ -1,0 +1,2 @@
+C:\source\react-express-webpack-boilerplate\obj\Debug\react-express-webpack-boilerplate.njsprojResolveAssemblyReference.cache
+C:\source\react-express-webpack-boilerplate\bin\Microsoft.NodejsTools.WebRole.dll
