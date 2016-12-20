@@ -1,0 +1,21 @@
+I'm the Home Page
+
+{{#setVars}}
+  {{#if foo}} 
+  it's true
+  {{/if}}
+  
+  {{appResponse}}
+{{/setVars}}
+
+
+{{#getJSON 'http://ifriends.net/?t=stdresultajax' responseCode as |responseCode|}}{{responseCode}}{{/getJSON}}
+
+"{{#sendHttpRequest 'http://ifriends.net/?t=stdresultajax'}}appHTTPResponse={{appHTTPResponse}}{{/sendHttpRequest}}
+
+{{appHTTPResponse}}
+
+
+
+{{> components/livehostmodule}}
+{{> footer}} 

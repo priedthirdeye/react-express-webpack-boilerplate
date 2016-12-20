@@ -6,19 +6,32 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var hbs = require('hbs');
 var hbsutils = require('hbs-utils')(hbs);
-var helpers = require("./views/helpers");
+var helpers = require("./src/views/_helpers");
 var session = require('express-session');
 
 
 //routes
-var routes = require('./routes/index');
+var routes = require('./src/routes/index');
+
+
+
+var router = express.Router();
+
+
 
 var app = express();
-hbs.registerPartials(__dirname + '/views/partials');
-hbsutils.registerWatchedPartials(__dirname + '/views/partials');
+hbs.registerPartials(__dirname + '/src/views/partials');
+hbsutils.registerWatchedPartials(__dirname + '/src/views/partials');
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/src/views'));
 app.set('view engine', 'hbs');
+
+//var twrp = require('./middleware/twrp')(app);
+//app.use(twrp.buildRoutes);
+
+
+
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
