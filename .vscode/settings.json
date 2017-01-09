@@ -1,0 +1,19 @@
+{
+  "files.exclude": {
+    "node_modules/": "explorerExcludedFiles",
+    "public/js/bundle.js": "explorerExcludedFiles",
+    "**/*.DS_Store": "explorerExcludedFiles",
+    "logs": "explorerExcludedFiles",
+    "*.log": "explorerExcludedFiles",
+    "npm-debug.log*": "explorerExcludedFiles",
+    "pids": "explorerExcludedFiles",
+    "*.pid": "explorerExcludedFiles",
+    "*.seed": "explorerExcludedFiles",
+    "build/Release": "explorerExcludedFiles",
+    "node_modules": "explorerExcludedFiles",
+    "jspm_packages": "explorerExcludedFiles",
+    ".npm": "explorerExcludedFiles",
+    ".node_repl_history": "explorerExcludedFiles",
+    "typings": "explorerExcludedFiles"
+  }
+}

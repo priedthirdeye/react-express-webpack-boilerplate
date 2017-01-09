@@ -1,20 +1,63 @@
 I'm the Home Page
 
-{{#setVars}}
-  {{#if foo}} 
-  it's true
-  {{/if}}
-  
-  {{appResponse}}
-{{/setVars}}
+<br><br>
+route={{route}}<br>
+params={{params}}<br>
+transformed={{transformed}}<br>
+
+{{#each applivehosts}}
+  {{vchscreennamesimple}}
+{{/each}}
+
+{{#if hasAccess}} <br>
+hasAccess bool {{hasAccess}}<br>
+{{/if}}
+
+{{#if hasAccess 'EQ' 'true'}} 
+      hasAccess string = {{hasAccess}}<br>
+{{/if}}
+
+{{#if color 'EQ' 'Orange'}} 
+      color = {{color}}<br>
+{{/if}}
+
+{{#if color 'EQ' 'oran*'}} 
+      color * {{color}}<br>
+{{/if}}
+
+{{#if color 'CT' 'orange1'}} 
+      color CT {{color}}<br>
+{{/if}}
+
+{{#if total 'GT' 2.5}} 
+      total > {{total}}<br>
+{{/if}}
+
+{{#switch total}}
+  {{#case 1}}
+    1 is for alpaca<br>
+  {{/case}}
+  {{#case 2}}
+    2 is for bluebird<br>
+  {{/case}}
+  {{#case 3}}
+    3 is for bluebird<br>
+    {{___gsendmsg}}
+  {{/case}}  
+  {{#case}}
+    default<br>
+  {{/case}}  
+{{/switch}}
 
 
+
+
+<br><br>
 {{#getJSON 'http://ifriends.net/?t=stdresultajax' responseCode as |responseCode|}}{{responseCode}}{{/getJSON}}
 
 "{{#sendHttpRequest 'http://ifriends.net/?t=stdresultajax'}}appHTTPResponse={{appHTTPResponse}}{{/sendHttpRequest}}
 
 {{appHTTPResponse}}
-
 
 
 {{> components/livehostmodule}}

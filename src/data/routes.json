@@ -1,0 +1,12 @@
+[
+    {
+        "route" : "cams",
+        "t": "site/navigation/livesessions/livebrowse/main",
+        "controller" : "livehosts"
+    },
+    {
+        "route" : "elite-cam-viewer",
+        "t": "site/navigation/livesessions/elitecamviewer/main",
+        "controller" : "livehosts"
+    }          
+]
