@@ -3,10 +3,9 @@ var hbs = require('hbs');
 var http = require('http');
 
 global.Promise = require('bluebird');
-var promisedHandlebars = require('promised-handlebars');
-var hbsSync = promisedHandlebars(require('handlebars'));
-var httpGet = require('get-promise');
-
+//var promisedHandlebars = require('promised-handlebars');
+//var hbsSync = promisedHandlebars(require('handlebars'));
+//var httpGet = require('get-promise');
 
 
 let Helpers = function() {
@@ -188,26 +187,6 @@ let Helpers = function() {
 			console.log('Message sent: ' + info.response);
 		});
 	});
-
-
-
-	// A block helper (retrieve github.com user data for a given username)
-	// Execute the helper-block with the user data when it resolves
-	hbsSync.registerHelper('githubuser', function(value, options) {
-		var url = 'https://api.github.com/users/' + value
-		return httpGet(url, {
-				headers: {
-					'User-Agent': 'Node'
-				}
-			})
-			.get('data')
-			.then(JSON.parse)
-			.then(function(data) {
-				// `options.fn` returns a promise. Wrapping brackets must be added after resolving
-				return options.fn(data);
-			});
-	});
-
 }
 
 module.exports = new Helpers();

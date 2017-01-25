@@ -71,7 +71,7 @@ cp.then(
                 var prData = _.transform(appData, function(result, obj, key) {
                                                     result[obj.prkey.toLowerCase()] = obj.prvalue;                                                
                                                     }, {});   
-                console.log(key);             
+                //console.log(prData.route);             
                //let route = _.find(appData, { 'prkey': 'route'}).prvalue;
                
                router.get('/' + prData.route, require('../controllers/' + (key.indexOf('livehosts') === 0 ? 'livehosts' : 'twrp'))(prData)); 

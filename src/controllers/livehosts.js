@@ -2,6 +2,39 @@ const _ = require('lodash');
 const sql = require('mssql');
 const cp = require('../database/get-connection')();
 
+var Cache = require('nice-cache')
+var cache = new Cache({ refreshInterval: 10 });
+
+
+var getChatHosts = function(callback){
+      var result;
+      cp.then(
+            function(conn) {
+                new sql.Request(conn)
+                .query('exec ifriendslive.dbo.SP_LiveHostsVariable').then(function(recordsets) { //prData.sp_livehostsvariable
+                    var arrData = _.flatMap(recordsets);
+                    var pageData = {
+                        'allpapplivehosts_v2': arrData
+                    };
+                    result = pageData;
+                    callback('error occurred', result);
+                }).catch(function(err) {
+                    console.log('err1', err);
+                });  
+            },
+            function(err) {
+                console.error(err);
+                process.exit(666);
+            }
+        );
+    
+};
+
+/*
+var NodeCache = require('cache-service-node-cache');
+var cacheModuleConfig = {defaultExpiration: 60};
+var nodeCache = new NodeCache(cacheModuleConfig);
+
 function getVarType(variable) {
   console.log(variable);
   if (variable.indexOf('N\'') == 0) {
@@ -23,9 +56,10 @@ function parseSqlStatement(sql, transformVars) {
             } else {                
                 sql = sql.toLowerCase().replace('~var:' + key + '~', (getVarType(variables[i]) !== 'int' ? '' : null));
             }
-        }
+        } 
         return sql;
 }
+*/
 
 module.exports = function(prData) {
     //_.find(appData,{'PrimaryTemplate'}
@@ -46,52 +80,32 @@ module.exports = function(prData) {
         //console.log(res.locals);
         //console.log(parseSqlStatement(prData.sp_name, res.locals));
 
-        cp.then(
-            function(conn) {
-                //do something with connection
-                new sql.Request(conn)
-                //.input('cClub', sql.VarChar(50), pclub) 
-                //.execute('if_live.[dbo].[SP_VCHGlobalVariables]').then(function(recordsets) {
-                .query('exec ' + prData.sp_livehostsvariable).then(function(recordsets) {
-                    var arrData = _.flatMap(recordsets);
-                    var pageData = {
-                        'allpapplivehosts_v2': arrData
-                    };
+        var chatHosts = cache.get('api-responses', 'chatHosts');
 
-                    //console.log(pageData); 
-                    res.locals = Object.assign({}, res.locals, pageData);  
-                  //  var loops = _.groupBy(arrData, 'settype'); 
-//                    res.locals = Object.assign({}, res.locals, loops);  
+        if (!!chatHosts) {
+            res.locals = Object.assign({}, res.locals, chatHosts);  
+            return res.render(t, {
+                title: 'req.params.model',
+                hasAccess: true,
+                total: 3,
+                route: req.url,
+                params: JSON.stringify(req.params)                        
+            });    
+        }
 
-/*                    
-                    var sanitized = {};
-                    for (var i = 0, len = arrData.length; i < len; i++) {
-                        var obj = arrData[i];
-                        for (var prop in obj) {                    
-                            if (obj[prop] instanceof Buffer !== true && typeof obj[prop].length !== 'undefined') {
-                                sanitized['g' + prop.toLowerCase()] = obj[prop]; 
-                            }
-                        }
-                    }
-                    res.locals = Object.assign({}, res.locals, sanitized);    
-                    */
-                    //next();              
-                    res.render(t, {
-                        title: 'req.params.model',
-                        hasAccess: true,
-                        total: 3,
-                        route: req.url,
-                        params: JSON.stringify(req.params),                        
-                    });                    
-                }).catch(function(err) {
-                    console.log('err1', err);
-                });  
-            },
-            function(err) {
-                console.error(err);
-                process.exit(666);
-            }
-        );
+
+        getChatHosts(function(err, result) {            
+            cache.set('api-responses', 'chatHosts', result);
+            cache.sub('api-responses', 'chatHosts', getChatHosts);            
+            res.locals = Object.assign({}, res.locals, result);  
+            res.render(t, {
+                title: 'req.params.model',
+                hasAccess: true,
+                total: 3,
+                route: req.url,
+                params: JSON.stringify(req.params)                        
+            });                
+        });
 
 
 /*

@@ -41,15 +41,18 @@ hasAccess bool {{hasAccess}}<br>
     2 is for bluebird<br>
   {{/case}}
   {{#case 3}}
-    3 is for bluebird<br>
-    {{___gsendmsg}}
+    3 is for bluebird<br>    
   {{/case}}  
   {{#case}}
     default<br>
   {{/case}}  
 {{/switch}}
 
-
+  {{#if psendmessage}}
+    Message Sent {{gsendmsg}}
+  {{else}}
+    pass psendmessage=true to send email
+  {{/if}}
 
 
 <br><br>

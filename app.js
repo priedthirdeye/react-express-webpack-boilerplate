@@ -8,18 +8,52 @@ var bodyParser = require('body-parser');
 var hbs = require('hbs');
 var hbsutils = require('hbs-utils')(hbs);
 require('./src/views/_helpers');
-var session = require('express-session');
+
 var responseTime = require('response-time');
 
 
 //routes
 var routes = require('./src/routes/index');
 
+/*
+var NodeCache = require('cache-service-node-cache');
+var cacheModuleConfig = {defaultExpiration: 60};
+var nodeCache = new NodeCache(cacheModuleConfig);
+
+
+function formatDate(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+}
+
+function goGetData() {
+    console.log(formatDate(new Date()));
+    return { 'ts': formatDate(new Date()) };
+  
+}
+
+var refresh = function(key, cb) {
+  var response = goGetData();
+  cb(null, response);
+}
+
+nodeCache.set('livehosts', goGetData(), 1 , refresh, function (err, result) { 
+        nodeCache.get('livehosts', function (err, response){
+            console.log('livehosts=', response);
+        });    
+});
+
+*/
 //var router = express.Router();
 
-
-
 var app = express();
+//app.enable('view cache');
 app.use(responseTime());
 hbs.registerPartials(__dirname + '/src/views/partials');
 hbsutils.registerWatchedPartials(__dirname + '/src/views/partials');
@@ -30,10 +64,6 @@ app.set('view engine', 'hbs');
 //var twrp = require('./middleware/twrp')(app);
 //app.use(twrp.buildRoutes);
 
-
-
-
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -43,11 +73,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  secret: '41A9E1792DE3F',
-  saveUninitialized: true,
-  resave: true
-}));
 
 /*
 app.use(function(req, res, next) {
@@ -64,10 +89,6 @@ app.use(function(req, res, next) {
 });
 */
 
-
-
-
-
 //var routeData = require('./src/data/routes');
 //for (var i = 0, len = routeData.length; i < len; i++) {
    // var route = routeData[i].route;
@@ -78,13 +99,8 @@ app.use(function(req, res, next) {
 //app.use('/cams', require('./src/controllers/livehosts'));
 app.use('/', routes);
 
-
-
-
-
-
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -95,7 +111,7 @@ app.use(function (req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
+  app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -106,13 +122,12 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
     error: {}
   });
 });
-
 
 module.exports = app;
