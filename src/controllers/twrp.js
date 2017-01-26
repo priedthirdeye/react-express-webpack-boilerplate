@@ -59,35 +59,24 @@ module.exports = function(prData) {
                     var arrData = _.flatMap(recordsets);
                     //console.log(arrData);
                     var loops = _.groupBy(arrData, 'settype'); 
-                    res.locals = Object.assign({}, res.locals, loops);  
-
-/*                    
-                    var sanitized = {};
-                    for (var i = 0, len = arrData.length; i < len; i++) {
-                        var obj = arrData[i];
-                        for (var prop in obj) {                    
-                            if (obj[prop] instanceof Buffer !== true && typeof obj[prop].length !== 'undefined') {
-                                sanitized['g' + prop.toLowerCase()] = obj[prop]; 
-                            }
-                        }
-                    }
-                    res.locals = Object.assign({}, res.locals, sanitized);    
-                    */
-                    //next();              
+                    console.log(loops);
+                    res.locals['__data'] = JSON.stringify(loops);
+                    res.locals = Object.assign({}, res.locals, loops);              
                     res.render(t, {
                         title: 'req.params.model',
-                        hasAccess: true,
-                        total: 3,
                         route: req.url,
-                        params: JSON.stringify(req.params),                
-                        applivehosts: [{'vchscreennamesimple': 'mstest'}, {'vchscreennamesimple': 'caitest3'}]
+                        params: JSON.stringify(req.params)
                     });                    
                 }).catch(function(err) {
                     console.log('err1', err);
+                    res.render(t, {
+                        route: req.url
+                    });                        
                 });  
             },
             function(err) {
                 console.error(err);
+                
                 process.exit(666);
             }
         );

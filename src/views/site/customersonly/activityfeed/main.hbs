@@ -1,6 +1,19 @@
 activityfeed<br><br>
-{{pfavorites}}
+@root.gvchscreennamesimple={{@root.gvchscreennamesimple}}<br>
+{{gvchscreennamesimple}}<br>
+
+{{#each appActivityFeed}}
+pfavorites={{../pfavorites}}
+../gvchscreennamesimple={{../gvchscreennamesimple}}
+@root.gvchscreennamesimple={{@root.gvchscreennamesimple}}
+  {{vchscreennamesimple}}<br>
+{{/each}}
+
+<hr>
 
 {{#each appActivityFeed}}
   {{vchscreennamesimple}}<br>
 {{/each}}
+
+
+
